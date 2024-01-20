@@ -23,7 +23,7 @@ public class Two_Pixel_Closest extends LinearOpMode {
         // Start timer.
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() < wait_time) {
-            telemetry.addLine("Delaying auto by 10 sec");
+            telemetry.addData("Auto Waiting","Auto Waiting");
         }
         //reset timer
         timer.reset();
@@ -32,15 +32,18 @@ public class Two_Pixel_Closest extends LinearOpMode {
             hw.right_motor.setPower(1);
             hw.left_motor.setPower(1);
         }
-
-        //Drop two pixels
-        hw.pixel_spear.setPosition(45);
-        hw.gusServo.setPosition(0);
-        hw.fringServo.setPosition(45);
-
         // Stop drivetrain
         hw.left_motor.setPower(0);
         hw.right_motor.setPower(0);
+        //Drop two pixels
+        hw.pixel_spear.setPosition(45);
+        hw.gusServo.setPosition(45);
+        hw.fringServo.setPosition(0);
+        timer.reset();
+        while (timer.seconds() < 3) {
+            telemetry.addData("Auto Finished","Auto Finished");
+        }
+
 
     }
 }
