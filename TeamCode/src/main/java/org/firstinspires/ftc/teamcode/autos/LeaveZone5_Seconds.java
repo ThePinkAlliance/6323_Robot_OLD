@@ -32,5 +32,14 @@ public class LeaveZone5_Seconds extends LinearOpMode {
         hw.left_motor.setPower(0);
         hw.right_motor.setPower(0);
 
+        //raise pixel spear
+        if(gamepad1.y){
+            hw.pixel_spear.setPosition(0);
+        }
+        //lower pixel spear
+        else if(gamepad1.x){
+            hw.pixel_spear.setPosition(45);
+        }
+
     }
 }

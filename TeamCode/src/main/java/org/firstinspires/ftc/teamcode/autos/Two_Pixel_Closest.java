@@ -17,7 +17,7 @@ public class Two_Pixel_Closest extends LinearOpMode {
         // Initialize motors & sensors.
         Hardware hw = new Hardware(hardwareMap);
         double drive_time = 1.25; //amount of time to drive forward in seconds
-        double wait_time = 0; //time to delay auto from start of match
+        double wait_time = 10; //time to delay auto from start of match
         waitForStart();
 
         // Start timer.
