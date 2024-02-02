@@ -22,12 +22,12 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         hw = new Hardware(hardwareMap);
 
-        hw.LiftR.setDirection(DcMotorSimple.Direction.REVERSE);
+        hw.samMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         hw.left_motor.setDirection(DcMotorSimple.Direction.REVERSE); //Added to correct for left motor direction
         hw.left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hw.right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hw.LiftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hw.LiftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.pixel_dropper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.samMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //hw.Color.enableLed(true);
 
@@ -88,16 +88,16 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
         hw.ClawL.setPosition(0.35);
         hw.ClawR.setPosition(0.81);
         sleep(500);
-        hw.LiftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.LiftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.LiftL.setTargetPosition(0);
-        hw.LiftR.setTargetPosition(0);
-        hw.LiftL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.LiftR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.LiftL.setPower(1);
-        hw.LiftR.setPower(1);
-        hw.LiftL.setTargetPosition(-10);
-        hw.LiftR.setTargetPosition(-10);
+        hw.pixel_dropper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hw.samMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hw.pixel_dropper.setTargetPosition(0);
+        hw.samMotor.setTargetPosition(0);
+        hw.pixel_dropper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hw.samMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hw.pixel_dropper.setPower(1);
+        hw.samMotor.setPower(1);
+        hw.pixel_dropper.setTargetPosition(-10);
+        hw.samMotor.setTargetPosition(-10);
 
         //STAGE 1 - Find Team Prop and move to the left/center/right spike
 
