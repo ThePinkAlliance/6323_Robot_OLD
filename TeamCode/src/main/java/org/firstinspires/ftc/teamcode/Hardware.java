@@ -11,11 +11,11 @@ public class Hardware {
     public Hardware(HardwareMap hardwareMap) {
         right_motor = hardwareMap.dcMotor.get("leftMotor");
         left_motor = hardwareMap.dcMotor.get("rightMotor");
-        pixel_dropper = hardwareMap.dcMotor.get("flintLockwoodMotor");
-        pixel_spear = hardwareMap.get(Servo.class, "pixel_spear");
-        samMotor = hardwareMap.dcMotor.get("samMotor");
-        gusServo = hardwareMap.get(Servo.class,"gus");
-        fringServo = hardwareMap.get(Servo.class, "fring");
-        silly = hardwareMap.get(Servo.class, "silly");
+        pixel_dropper = hardwareMap.dcMotor.get("flintLockwoodMotor"); //Left Arm Motor
+        samMotor = hardwareMap.dcMotor.get("samMotor"); //Right Arm Motor
+        pixel_spear = hardwareMap.get(Servo.class, "pixel_spear"); //Rear-mounted pre-loaded pixel
+        gusServo = hardwareMap.get(Servo.class,"gus"); // Right Claw Servo
+        fringServo = hardwareMap.get(Servo.class, "fring"); // Left Claw Servo
+        silly = hardwareMap.get(Servo.class, "silly"); //Airplane Launcher Pin Servo
     }
 }
