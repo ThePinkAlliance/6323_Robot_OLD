@@ -84,20 +84,9 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
         ElapsedTime timeout; //object to store a timer to give up the husky routine after 5 seconds of failed attempts to locate the team prop
         int propLocation = -1; //0 left, 1 center, 2 right
         int blueSetpoint = 1150;
-        // Close and lift the claw
+        // Keep Claw Closed
         hw.fringServo.setPosition(0.35);
         hw.gusServo.setPosition(0.81);
-        sleep(500);
-        hw.pixel_dropper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.samMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.pixel_dropper.setTargetPosition(0);
-        hw.samMotor.setTargetPosition(0);
-        hw.pixel_dropper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.samMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.pixel_dropper.setPower(1);
-        hw.samMotor.setPower(1);
-        hw.pixel_dropper.setTargetPosition(-10);
-        hw.samMotor.setTargetPosition(-10);
 
         //STAGE 1 - Find Team Prop and move to the left/center/right spike
 
@@ -218,13 +207,13 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
                 hw.left_motor.setPower(0);
                 hw.right_motor.setPower(0);
             }
-            hw.PixDrop.setPosition(0.14);
+            hw.pixel_spear.setPosition(0.14);
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 3) {
                 hw.left_motor.setPower(0);
                 hw.right_motor.setPower(0);
             }
-            hw.PixDrop.setPosition(1);
+            hw.pixel_spear.setPosition(1);
             //realign with center spike mark
             if (propLocation == 0) { //left
                 do {

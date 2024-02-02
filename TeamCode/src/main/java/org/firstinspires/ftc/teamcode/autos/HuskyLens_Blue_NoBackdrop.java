@@ -22,12 +22,12 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         hw = new Hardware(hardwareMap);
 
-        hw.LiftR.setDirection(DcMotorSimple.Direction.REVERSE);
-        hw.DriveL.setDirection(DcMotorSimple.Direction.REVERSE); //Added to correct for left motor direction
-        hw.DriveL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hw.DriveR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hw.LiftL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hw.LiftR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.samMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        hw.left_motor.setDirection(DcMotorSimple.Direction.REVERSE); //Added to correct for left motor direction
+        hw.left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.pixel_dropper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.samMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //hw.Color.enableLed(true);
 
@@ -37,7 +37,7 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
 
         /*
          * This sample rate limits the reads solely to allow a user time to observe
-         * what is happening on the Driver Station telemetry.  Typical applications
+         * what is happening on the right_motor Station telemetry.  Typical applications
          * would not likely rate limit.
          */
         Deadline rateLimit = new Deadline(READ_PERIOD, TimeUnit.SECONDS);
@@ -85,19 +85,19 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
         int propLocation = -1; //0 left, 1 center, 2 right
         int blueSetpoint = 1150;
         // Close and lift the claw
-        hw.ClawL.setPosition(0.35);
-        hw.ClawR.setPosition(0.81);
+        hw.fringServo.setPosition(0.35);
+        hw.gusServo.setPosition(0.81);
         sleep(500);
-        hw.LiftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.LiftR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.LiftL.setTargetPosition(0);
-        hw.LiftR.setTargetPosition(0);
-        hw.LiftL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.LiftR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.LiftL.setPower(1);
-        hw.LiftR.setPower(1);
-        hw.LiftL.setTargetPosition(-10);
-        hw.LiftR.setTargetPosition(-10);
+        hw.pixel_dropper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hw.samMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hw.pixel_dropper.setTargetPosition(0);
+        hw.samMotor.setTargetPosition(0);
+        hw.pixel_dropper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hw.samMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hw.pixel_dropper.setPower(1);
+        hw.samMotor.setPower(1);
+        hw.pixel_dropper.setTargetPosition(-10);
+        hw.samMotor.setTargetPosition(-10);
 
         //STAGE 1 - Find Team Prop and move to the left/center/right spike
 
@@ -147,55 +147,55 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
         //move forward quickly to leave the starting area
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 1.25) { //give 0.5 sec to move off of center spike
-            hw.DriveL.setPower(-0.8);
-            hw.DriveR.setPower(-0.8);
+            hw.left_motor.setPower(-0.8);
+            hw.right_motor.setPower(-0.8);
         }
         //move forward slowly until the color sensor detects the center spike mark
         while(hw.Color.blue() < blueSetpoint) {
-            hw.DriveL.setPower(-0.3);
-            hw.DriveR.setPower(-0.3);
+            hw.left_motor.setPower(-0.3);
+            hw.right_motor.setPower(-0.3);
             telemetry.addData("Auto Status", "INFO: Looking for blue... " + hw.Color.blue());
             telemetry.update();
         }
-        hw.DriveL.setPower(0);
-        hw.DriveR.setPower(0);
+        hw.left_motor.setPower(0);
+        hw.right_motor.setPower(0);
         //turn towards team prop
         if (propLocation == 0) {
             //move backwards briefly to make space for the truses
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.75) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(.3);
-                hw.DriveR.setPower(.3);
+                hw.left_motor.setPower(.3);
+                hw.right_motor.setPower(.3);
             }
             while(hw.Color.blue() < blueSetpoint) { //then start checking for left spike
-                hw.DriveL.setPower(-0.025);
-                hw.DriveR.setPower(0.3);
+                hw.left_motor.setPower(-0.025);
+                hw.right_motor.setPower(0.3);
                 telemetry.addData("Auto Status", "INFO: Looking for blue... " + hw.Color.blue());
                 telemetry.update();
             }
             //drive off line so pixel hits line
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.25) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(-0.25);
-                hw.DriveR.setPower(-0.4);
+                hw.left_motor.setPower(-0.25);
+                hw.right_motor.setPower(-0.4);
             }
         }
         if (propLocation == 1) { //prop location 1 (center) has already been reached, just move off line a little
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(-.3);
-                hw.DriveR.setPower(-.3);
+                hw.left_motor.setPower(-.3);
+                hw.right_motor.setPower(-.3);
             }
         }
         else if (propLocation == 2) {
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(0.4);
-                hw.DriveR.setPower(0.15);
+                hw.left_motor.setPower(0.4);
+                hw.right_motor.setPower(0.15);
             }
             while(hw.Color.blue() < blueSetpoint) { //then start checking for right spike
-                hw.DriveL.setPower(0.3);
-                hw.DriveR.setPower(0.125);
+                hw.left_motor.setPower(0.3);
+                hw.right_motor.setPower(0.125);
                 telemetry.addData("Auto Status", "INFO: Looking for blue... " + hw.Color.blue());
                 telemetry.update();
 
@@ -203,30 +203,30 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
             //drive off line so pixel hits line
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(-0.4);
-                hw.DriveR.setPower(-0.15);
+                hw.left_motor.setPower(-0.4);
+                hw.right_motor.setPower(-0.15);
             }
         }
-        hw.DriveL.setPower(0);
-        hw.DriveR.setPower(0);
+        hw.left_motor.setPower(0);
+        hw.right_motor.setPower(0);
         //drop the pixel, wait for robot to stop first
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.5) {
-            hw.DriveL.setPower(0);
-            hw.DriveR.setPower(0);
+            hw.left_motor.setPower(0);
+            hw.right_motor.setPower(0);
         }
-        hw.PixDrop.setPosition(0.14);
+        hw.pixel_spear.setPosition(0.14);
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 3) {
-            hw.DriveL.setPower(0);
-            hw.DriveR.setPower(0);
+            hw.left_motor.setPower(0);
+            hw.right_motor.setPower(0);
         }
-        hw.PixDrop.setPosition(1);
+        hw.pixel_spear.setPosition(1);
         //realign with center spike mark
         if (propLocation == 0) { //left
             do {
-                hw.DriveL.setPower(-0.125);
-                hw.DriveR.setPower(-0.3);
+                hw.left_motor.setPower(-0.125);
+                hw.right_motor.setPower(-0.3);
                 telemetry.addData("Auto Status", "INFO: Looking for blue... " + hw.Color.blue());
                 telemetry.update();
             } while(hw.Color.blue() < blueSetpoint);
@@ -234,15 +234,15 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
         else if (propLocation == 1) {//prop location 1 (center)
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.DriveL.setPower(.3);
-                hw.DriveR.setPower(.3);
+                hw.left_motor.setPower(.3);
+                hw.right_motor.setPower(.3);
             }
         }
         else if (propLocation == 2) { //right
 
             do {
-                hw.DriveL.setPower(-0.3);
-                hw.DriveR.setPower(-0.125);
+                hw.left_motor.setPower(-0.3);
+                hw.right_motor.setPower(-0.125);
                 telemetry.addData("Auto Status", "INFO: Looking for blue... " + hw.Color.blue());
                 telemetry.update();
 
@@ -251,8 +251,8 @@ public class HuskyLens_Blue_NoBackdrop extends LinearOpMode {
         //stop before turn towards backboard
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.25) {
-            hw.DriveL.setPower(0);
-            hw.DriveR.setPower(0);
+            hw.left_motor.setPower(0);
+            hw.right_motor.setPower(0);
         }
     }
 }
