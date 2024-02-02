@@ -30,15 +30,26 @@ public class Tele extends LinearOpMode {
             double left_y = gamepad1.left_stick_y;
             double right_y = gamepad1.right_stick_y;
 
-            hw.right_motor.setPower(right_y);
-            hw.left_motor.setPower(left_y);
+            int slowMode;
+
+            if (gamepad2.right_bumper){
+                slowMode = 2;
+            }
+            else{
+                slowMode = 1;
+            }
+
+            hw.right_motor.setPower(right_y/slowMode);
+            hw.left_motor.setPower(left_y/slowMode);
+
+
 
             if(clawUp) {
-                hw.pixel_dropper.setPower(-0.7);
-                hw.samMotor.setPower(0.7);
+                hw.pixel_dropper.setPower(-0.7/slowMode);
+                hw.samMotor.setPower(0.7/slowMode);
             } else if(clawDown){
-                hw.pixel_dropper.setPower(0.7);
-                hw.samMotor.setPower(-0.7);
+                hw.pixel_dropper.setPower(0.7/slowMode);
+                hw.samMotor.setPower(-0.7/slowMode);
             } else {
                 hw.pixel_dropper.setPower(0.0);
                 hw.samMotor.setPower(0.0);
