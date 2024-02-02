@@ -85,8 +85,8 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
         int propLocation = -1; //0 left, 1 center, 2 right
         int blueSetpoint = 1150;
         // Close and lift the claw
-        hw.ClawL.setPosition(0.35);
-        hw.ClawR.setPosition(0.81);
+        hw.fringServo.setPosition(0.35);
+        hw.gusServo.setPosition(0.81);
         sleep(500);
         hw.pixel_dropper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hw.samMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -291,8 +291,8 @@ public class HuskyLens_Blue_Backdrop extends LinearOpMode {
                 hw.right_motor.setPower(0);
             }
             //release 2nd pixel
-            hw.ClawL.setPosition(0.75);
-            hw.ClawR.setPosition(0.43);
+            hw.fringServo.setPosition(0.75);
+            hw.gusServo.setPosition(0.43);
             //stop while pixel drops
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 3) {
