@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.Hardware;
  * by commanding the left & right motors for two seconds before stopping.
  */
 @Autonomous
-public class Two_Pixel_Farthest extends LinearOpMode {
+public class Backdrop_Only_Closest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize motors & sensors.
         Hardware hw = new Hardware(hardwareMap);
-        double drive_time = 2.8; //amount of time to drive forward in seconds
+        double drive_time = 1.25; //amount of time to drive forward in seconds
         double wait_time = 10; //time to delay auto from start of match
         waitForStart();
 
