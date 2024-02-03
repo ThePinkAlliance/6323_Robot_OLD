@@ -22,7 +22,8 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         hw = new Hardware(hardwareMap);
 
         hw.samMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        hw.left_motor.setDirection(DcMotorSimple.Direction.REVERSE); //Added to correct for left motor direction
+        hw.left_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        hw.right_motor.setDirection(DcMotorSimple.Direction.REVERSE);
         hw.left_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hw.right_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hw.pixel_dropper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -83,20 +84,6 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         ElapsedTime timeout; //object to store a timer to give up the husky routine after 5 seconds of failed attempts to locate the team prop
         int propLocation = -1; //0 left, 1 center, 2 right
         int redSetpoint = 650;
-        // Close and lift the claw
-        hw.fringServo.setPosition(0.35);
-        hw.gusServo.setPosition(0.81);
-        sleep(500);
-        hw.pixel_dropper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.samMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hw.pixel_dropper.setTargetPosition(0);
-        hw.samMotor.setTargetPosition(0);
-        hw.pixel_dropper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.samMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hw.pixel_dropper.setPower(1);
-        hw.samMotor.setPower(1);
-        hw.pixel_dropper.setTargetPosition(-10);
-        hw.samMotor.setTargetPosition(-10);
 
         //STAGE 1 - Find Team Prop and move to the left/center/right spike
 
@@ -146,60 +133,55 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         //move forward quickly to leave the starting area
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 1.25) { //give 0.5 sec to move off of center spike
-            hw.left_motor.setPower(-0.8);
-            hw.right_motor.setPower(-0.8);
+            hw.right_motor.setPower(-0.7);
+            hw.left_motor.setPower(-0.7);
         }
         //move forward slowly until the color sensor detects the center spike mark
         while(hw.Color.red() < redSetpoint) {
-            hw.left_motor.setPower(-0.3);
             hw.right_motor.setPower(-0.3);
+            hw.left_motor.setPower(-0.3);
             telemetry.addData("Auto Status", "INFO: Looking for red... " + hw.Color.red());
             telemetry.update();
         }
-        hw.left_motor.setPower(0);
         hw.right_motor.setPower(0);
+        hw.left_motor.setPower(0);
         //turn towards team prop
         if (propLocation == 0) {
             //move backwards briefly to make space for the truses
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(.3);
                 hw.right_motor.setPower(.3);
-            }
-            timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-            while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(0.05);
-                hw.right_motor.setPower(0.4);
+                hw.left_motor.setPower(.3);
             }
             while(hw.Color.red() < redSetpoint) { //then start checking for left spike
-                hw.left_motor.setPower(0.0375);
-                hw.right_motor.setPower(0.3);
+                hw.right_motor.setPower(-0.0375);
+                hw.left_motor.setPower(0.3);
                 telemetry.addData("Auto Status", "INFO: Looking for red... " + hw.Color.red());
                 telemetry.update();
             }
             //drive off line so pixel hits line
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.25) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(-0.1);
-                hw.right_motor.setPower(-0.4);
+                hw.right_motor.setPower(-0.05);
+                hw.left_motor.setPower(-0.4);
             }
         }
         if (propLocation == 1) { //prop location 1 (center) has already been reached, just move off line a little
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(-.3);
                 hw.right_motor.setPower(-.3);
+                hw.left_motor.setPower(-.3);
             }
         }
         else if (propLocation == 2) {
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(0.4);
-                hw.right_motor.setPower(0.15);
+                hw.right_motor.setPower(0.4);
+                hw.left_motor.setPower(0.05);
             }
             while(hw.Color.red() < redSetpoint) { //then start checking for right spike
-                hw.left_motor.setPower(0.3);
-                hw.right_motor.setPower(0.125);
+                hw.right_motor.setPower(0.3);
+                hw.left_motor.setPower(0.0325);
                 telemetry.addData("Auto Status", "INFO: Looking for red... " + hw.Color.red());
                 telemetry.update();
 
@@ -207,8 +189,8 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
             //drive off line so pixel hits line
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(-0.4);
-                hw.right_motor.setPower(-0.15);
+                hw.right_motor.setPower(-0.4);
+                hw.left_motor.setPower(-0.05);
             }
         }
         hw.left_motor.setPower(0);
@@ -216,21 +198,21 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         //drop the pixel, wait for robot to stop first
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.5) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
         hw.pixel_spear.setPosition(0.14);
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 3) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
         hw.pixel_spear.setPosition(1);
         //realign with center spike mark
         if (propLocation == 0) { //left
             do {
-                hw.left_motor.setPower(-0.075);
-                hw.right_motor.setPower(-0.3);
+                hw.right_motor.setPower(-0.075);
+                hw.left_motor.setPower(-0.3);
                 telemetry.addData("Auto Status", "INFO: Looking for red... " + hw.Color.red());
                 telemetry.update();
             } while(hw.Color.red() < redSetpoint);
@@ -238,15 +220,15 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         else if (propLocation == 1) {//prop location 1 (center)
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
             while (timer.seconds() < 0.5) { //give 0.5 sec to move off of center spike
-                hw.left_motor.setPower(.3);
                 hw.right_motor.setPower(.3);
+                hw.left_motor.setPower(.3);
             }
         }
         else if (propLocation == 2) { //right
 
             do {
-                hw.left_motor.setPower(-0.3);
-                hw.right_motor.setPower(-0.125);
+                hw.right_motor.setPower(-0.3);
+                hw.left_motor.setPower(-0.0325);
                 telemetry.addData("Auto Status", "INFO: Looking for red... " + hw.Color.red());
                 telemetry.update();
 
@@ -255,57 +237,51 @@ public class HuskyLens_Red_Backdrop extends LinearOpMode {
         //stop before turn towards backboard
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.25) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
         //turn right towards backboard, left spike mark needs shorter turn time
         if(propLocation == 0) {
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-            while (timer.seconds() < 0.80) {
-                hw.left_motor.setPower(-.5);
-                hw.right_motor.setPower(.5);
+            while (timer.seconds() < 0.7) {
+                hw.right_motor.setPower(-.5);
+                hw.left_motor.setPower(.5);
             }
         }
         else {
             timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-            while (timer.seconds() < 0.8) {
-                hw.left_motor.setPower(-.5);
-                hw.right_motor.setPower(.5);
+            while (timer.seconds() < 0.7) {
+                hw.right_motor.setPower(-.5);
+                hw.left_motor.setPower(.5);
             }
         }
         //stop before move towards backboard
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.25) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
         //move forward towards backboard
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-        while (timer.seconds() < 1.75) {
-            hw.left_motor.setPower(-5);
+        while (timer.seconds() < 1.6) {
             hw.right_motor.setPower(-5);
+            hw.left_motor.setPower(-5);
         }
         //stop before droping pixel
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 0.25) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
         //release 2nd pixel
-        hw.fringServo.setPosition(0.75);
-        hw.gusServo.setPosition(0.43);
+        hw.fringServo.setPosition(1);
+        hw.gusServo.setPosition(0);
         //stop while pixel drops
         timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         while (timer.seconds() < 3) {
-            hw.left_motor.setPower(0);
             hw.right_motor.setPower(0);
+            hw.left_motor.setPower(0);
         }
-        //straighten with backboard
-        /* timer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-        while (timer.seconds() < 0.2) {
-            hw.left_motor.setPower(-2);
-            hw.right_motor.setPower(2);
-        } */
 
 
     }
